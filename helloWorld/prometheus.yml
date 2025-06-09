@@ -1,0 +1,12 @@
+global:
+  scrape_interval: 5s  # Reduce interval to get more frequent data
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]  # Prometheus self-monitoring
+
+  - job_name: "traefik"
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ["traefik:8082"]  # Ensure this matches your Traefik metrics port

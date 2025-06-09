@@ -37,16 +37,28 @@ if not devMode:
         DEBUG = False
     else:
         DEBUG = True
+
+    # so django knows its secure
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
     
     # posting will fail without PASSWORD
     EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS') # ONLY PERSON HOSTING SHOULD KNOW PASSWORD
+
+    # restrict stuff in actual production
+    ALLOWED_HOSTS = ["https://www.dhsclubs.org", "www.dhsclubs.org"]
+    CSRF_TRUSTED_ORIGINS = ["https://www.dhsclubs.org", "www.dhsclubs.org"]
 else:
     DEBUG = True
     SECRET_KEY = "development-key-exposedEUkm398278sunL98e89"
     EMAIL_HOST_PASSWORD = "notThePassword"
 
-ALLOWED_HOSTS = ["https://dhsclubs.org", "https://www.dhsclubs.org", "http://127.0.0.1", "http://dhsclubs.org", "http://www.dhsclubs.org", "*"]
-CSRF_TRUSTED_ORIGINS = ["https://dhsclubs.org", "https://www.dhsclubs.org", "http://127.0.0.1", "http://dhsclubs.org", "http://www.dhsclubs.org"]
+    # allow most stuff in development mode
+    ALLOWED_HOSTS = ["https://dhsclubs.org", "https://www.dhsclubs.org", "http://127.0.0.1", "www.dhsclubs.org", "http://www.dhsclubs.org", "*"]
+    CSRF_TRUSTED_ORIGINS = ["https://dhsclubs.org", "https://www.dhsclubs.org", "http://127.0.0.1", "http://dhsclubs.org", "http://www.dhsclubs.org"]
+
 
 ADMINS = [("Cody", "zcody007@gmail.com")]
 
@@ -83,7 +95,7 @@ SOCIALACCOUNT_PROVIDERS = {
                         },
         "VERIFIED_EMAIL": True,
         'OAUTH2_PARAMS': {
-            'redirect_uri': 'http://django.com/accounts/google/login/callback/',
+            'redirect_uri': 'https://django.com/accounts/google/login/callback/',
         }
     }
 }
@@ -190,8 +202,6 @@ AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 )
-
-#SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 #ACCOUNT_ADAPTER = 'users.adapters.MyAccountAdapter'
 #SOCIALACCOUNT_ADAPTER = 'users.adapters.MySocialAccountAdapter'
