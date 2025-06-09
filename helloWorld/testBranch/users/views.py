@@ -42,6 +42,45 @@ def logout_view(request):
     logout(request)
     return redirect("/")
 
+def trivia(request):
+    if request.user.is_authenticated:
+        return render(request, 'trivia.html')
+    else:
+        return render(request, 'NuhUh.html')
+
+def triviaAdmin(request):
+    return render(request, 'triviaAdmin.html')
+
+
+def triviaQuestionMaker(request):
+    return render(request, 'triviaQuestionMaker.html')
+
+def triviaQuestionUpload(request):
+    # gets the trivia club object to attach to the extra data model
+    club = Club.objects.get(name = "Trivia")
+
+    if request.user.is_authenticated and (club.advisors.filter(email = request.user.email).exists() or club.leaders.filter(email = request.user.email).exists()):
+
+        # converts Qstack in the POST request into a list as it is sent as a json
+        questionList = request.POST.get('Qstack')
+        questionList = json.loads(questionList)
+
+        # 0 is the current question number & false is if the round is active
+        questionStore = [0, False, questionList]
+
+        # saves the question bank to the DB
+        ClubData.objects.create(
+                club = club,
+                name = "Question Bank #" + str(club.clubdata_set.count() + 1),
+                data = json.dumps(questionStore)
+        )
+
+        return redirect("/triviaQuestionMaker") # redirects to prevent form resubmission
+    else:
+        return redirect("/") # redirects to main page
+    
+
+
 def club_display_new(request):
     # get all clubs and put them in a dictionary where each club will have tags related to them seperated
     # by ",  " for easy deciper on the js side
@@ -538,7 +577,7 @@ def addComment(request):
     # get club by checking what club the org post comes from & get the post
     post = LiveFeed.objects.get(id = postKey)
     club = Club.objects.get(name = post.club.name)
-
+    
     # Check if they are authed to make comments on the post
     if request.user.is_authenticated and (club.users.filter(email = request.user.email).exists() or 
         club.advisors.filter(email = request.user.email).exists() or club.leaders.filter(email = request.user.email).exists()):

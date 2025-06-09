@@ -1,0 +1,65 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  
+  
+    background: radial-gradient(circle, #c2bdbd, #1a1a1a);
+  
+  
+    overflow-x: hidden;
+    overflow-y: scroll;
+  
+  
+    margin: 0;
+    padding: 0;
+}
+
+.topOptions {
+    display: flex;
+    gap: 5px;
+}
+
+.bottomOptions {
+    display: flex;
+    margin-top: 5px;
+    gap: 5px;
+}
+
+.selectOption {
+    width: 150px;
+    height: 75px;
+}
+
+.liveChat {
+    margin-top: 10px;
+    display: flex;
+    gap:5px;
+    align-items: center;
+    flex-direction: column;
+}
+
+.roundControls {
+    display: flex;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.controlButton {
+    width: 180px;
+    height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+h3 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.questionDisplay {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

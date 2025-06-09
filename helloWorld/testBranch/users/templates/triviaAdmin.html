@@ -1,0 +1,200 @@
+<!-- chat/templates/chat/room.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Trivia</title>
+    <link rel="stylesheet" href="/static/trivia.css">
+</head>
+<body>
+    <div class="roundControls">
+        <button id="startButton" class="controlButton" onclick="startRound()">Start Round</button>
+        <button class="controlButton" onclick="endRound()">Time (Nonfunctional)</button>
+    </div>
+
+
+    <h3 id="">User View</h3>
+    <h3 class="questionDisplay">Question</h3>
+    <div class="topOptions">
+        <button class="selectOption" onclick="questionSelection(0)">Opt 1</button>
+        <button class="selectOption" onclick="questionSelection(1)">Opt 2</button>
+    </div>
+
+    <div class="bottomOptions">
+        <button class="selectOption" onclick="questionSelection(2)">Opt 3</button>
+        <button class="selectOption" onclick="questionSelection(3)">Opt 4</button>
+    </div>
+
+    
+    
+
+    <div class="liveChat">
+        Live Chat (Messages are logged)
+        <textarea id="chat-log" readonly="readonly" cols="50" rows="10" style="resize: none;"></textarea>
+        <input id="chat-message-input" type="text" size="50">
+        <input id="chat-message-submit" type="button" value="Send">
+    </div>
+    
+    <script>
+        // Wait function
+        function wait(ms) {
+            // Don't ask me how this works, I have no clue it just does
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }   
+
+
+        const adminRoomName = "";
+
+        const adminSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/trivia/adminControl'
+        );
+
+        adminSocket.onmessage = function(e) {
+            // do something (we should get # of player still in game & # that have answered)
+        }
+
+        adminSocket.onclose = function(e) {
+            console.error('Admin socket closed unexpectedly');
+        };
+
+
+        async function startRound() {
+            document.getElementById("startButton").disabled = true;
+            document.getElementById("startButton").innerHTML = "round in progress, check user view";
+            adminSocket.send('START');
+            await wait(5000); // Waits 5 seconds before letting the user click again
+            document.getElementById("startButton").disabled = false;
+            document.getElementById("startButton").innerHTML = "Start Round";
+        }
+
+        function endRound() {
+            adminSocket.send('END')
+        }
+
+
+
+
+        // ------- USER INTERFACE START -------
+        const roomName = "triviaRoom";
+        const userState = true; // Keeps track is the user is still in the game - CLIENT SIDE ONLY
+
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/'
+            + roomName
+            + '/'
+        );
+
+
+        function addMessageToChat(message) {
+            document.getElementById("chat-log").value += (message + '\n');
+        }
+
+        function checkAnswer(ansArray) {
+            console.log("Displaying answers!")
+            console.log(ansArray)
+        }
+
+        async function countdown() {
+            let seconds = 5;
+            console.log("Countdown Starting!")
+
+            for (let i = seconds; i >= 0; i--) {
+                console.log(i)
+                await wait(1000)
+            }
+            
+            console.log("Countdown Done!")
+        }
+
+        function displayQuestionsOptions(Qstack) {
+            console.log("Displaying questions and options!")
+            console.log(Qstack)
+        }
+
+        function questionSelection(optNum) {
+            chatSocket.send(JSON.stringify({
+                'message': "",
+                'optionSelected': optNum
+            }));
+        }
+
+
+
+        // Parse what message has been recived & call the respective functions to excute them
+
+        // json list will come in this format: [ message - Message to be displayed in chat
+        //                                      [Option 1 True/False, Option 2 True/False, - Question Answers
+        //                                       Option 3 True/False, Option 4 True/False], - Question Answers
+        //                                       Countdown? True/False, - gives the message to start countdown
+        //                                       [Question, Option 1, Option 2, Option 3], - Array of Questions (OVERRIDES COUNTDOWN WHEN SENT)
+        //                                       eliminated? True/False, ] - State of the user, if they are eliminated, answers will NOT be
+        //                                                                   sent to the server.
+        // Ex. [ "" - string is empty, so no message to display
+        //      [true, false, false, false], - Check answers as they come in
+        //       false, - no countdown to initate
+        //       [], - no questions to display so empty
+        //       false] - User is not eliminated
+        
+        chatSocket.onmessage = function(e) {
+            let data = JSON.parse(e.data);
+            console.log(data);
+
+            if (data[4]) {
+                userState = false; // sets user state to eliminated when they are eliminated
+            }
+
+            // Only prints out a message if the string is more than 1 
+            if (data[0].length != 0) {
+                addMessageToChat(data[0]);
+                return
+            }
+
+            // Checks answers if they come in through the ws (websocket) 
+            if (data[1].length != 0) {
+                checkAnswer(data[1]);
+                return
+            }
+
+            // Start countdown if this is true - Countdown function will not block onmessage function from running.
+            if (data[2]) {
+                countdown();
+                return
+            }
+
+            // Display questions and answers if they come through
+            if (data[3].length != 0) {
+                displayQuestionsOptions(data[3]);
+                return
+            }
+
+
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.key === 'Enter') {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'optionSelected': -1
+            }));
+            messageInputDom.value = '';
+        };
+        // ------- USER INTERFACE END -------
+    </script>
+</body>
+</html>
