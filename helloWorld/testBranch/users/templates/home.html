@@ -6,12 +6,12 @@
         <meta name="viewport" content = "width=device-width, initial-scale=1.0">
         <title>Home</title>
         <link rel="stylesheet" href="/static/loginDefault.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="/static/classStyle.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <link rel="stylesheet" href="/static/classStyle.css">
     </head>
-    <body>
+    <body style="display: block;">
     <!-- Navigation bar -->
-    <nav>   
+    <nav style="padding-left: 0px;">   
         <div class="logo">Club Website</div>
         <div class="nav-items">
             <a href="/myClubs">My Clubs</a>
@@ -26,7 +26,6 @@
             </div>
         </div>
     </nav>
-
         <section class="hero">
             <div class="hero-container">
                 <div class="column-left">
@@ -42,13 +41,21 @@
                             <i class="fab fa-google"></i> Get Started
                         </a>    
                     {% endif %}
-                </div>
-                <div class="column-right">
-                    
-                </div>
-                
+                </div>            
             </div>
         </section>
         <div class="loader"></div>
+        
+        <footer>
+            <a href="/blog" class="link-style">
+                Developer Blog
+            </a>
+            <a href="/tos" class="link-style">
+                Terms of Service
+            </a>
+            <a href="/privacyPolicy" class="link-style">
+                Privacy Policy
+            </a>
+        </footer>
     </body>
 </html>
