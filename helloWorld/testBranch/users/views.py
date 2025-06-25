@@ -23,6 +23,15 @@ def mobile(request):
             return False
     except:
         return True
+    
+def tos(request):
+    return render(request, 'tos.html')
+
+def privacyPolicy(request):
+    return render(request, 'privacyPolicy.html')
+
+def blog(request):
+    return render(request, 'blog.html')
 
 def home(request):
     if request.user.is_authenticated:

@@ -5,6 +5,11 @@ from . import views
 
 urlpatterns = [
     path("", views.home),
+    # footer links
+    path("tos", views.tos),
+    path("privacyPolicy", views.privacyPolicy),
+    path("blog", views.blog),
+    #
     path("loggedIn", views.registerUserAs),
     path("logout", views.logout_view),
     path("clubs/", views.club_display_new),
