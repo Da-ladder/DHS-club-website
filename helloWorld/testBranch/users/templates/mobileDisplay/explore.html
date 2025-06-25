@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explore</title>
     <link rel="stylesheet" href="/static/mobile/explore.css">
+    <link rel="stylesheet" href="/static/footer.css">
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
 </head>
-<body>
+<body style="display: block;">
 
     <!-- Navigation bar -->
     <nav>   
@@ -55,9 +56,9 @@
                         <div class="club-name"> {{ club.name }} </div>
                     </div>
                     {% if club.homeURL == None %}
-                        <img src="https://lh3.googleusercontent.com/drive-viewer/AKGpihYnULVOgKIVqwc4otmdCrLIVB3oTyPkDX_JzWen6vGGjh8IjDUJbqCBOiD0cYsBhRsIRhg_B7qQWHdK0zRuo0HFfYeqD5CQeBw=s1600-rw-v1" class="card-image">
+                        <img src="/static/missingClubPic.png" class="card-image">
                     {% else %}
-                        <img src="{{club.homeURL}}" class="card-image">
+                        <img src="/static/missingClubPic.png" class="card-image"> <!-- {{club.homeURL}} -->
                     {% endif %}
                     <div class="color-overlay"></div>
                 </div>
@@ -66,5 +67,17 @@
     </div>
 
     <script src="/static/mobile/explore.js"></script>
+
+    <footer style="justify-content: space-between; gap:10px;">
+            <a href="/blog" class="link-style" style="margin-right: 0px;">
+                Developer Blog
+            </a>
+            <a href="/tos" class="link-style" style="margin-right: 0px;">
+                Terms of Service
+            </a>
+            <a href="/privacyPolicy" class="link-style" style="margin-right: 0px;">
+                Privacy Policy
+            </a>
+        </footer>
 </body>
 </html>

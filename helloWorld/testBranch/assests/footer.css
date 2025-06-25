@@ -16,8 +16,10 @@ footer {
   display: flex;
   background-color: #333;
   color: white;
-  text-align: left;
+  text-align: center;
   padding: 1rem;
+  height: 34px;
+  font-size: 0.9rem;
   position: relative; /* or fixed if you want it always visible */
   bottom: 0;
 }

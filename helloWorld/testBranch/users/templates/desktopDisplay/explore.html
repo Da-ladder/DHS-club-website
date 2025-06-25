@@ -52,9 +52,9 @@
                     <p class="card-description">{{ club.discription }}</p>
                 </div>
                 {% if club.homeURL == "None" or club.homeURL == None or club.homeURL == "" %}
-                    <img src="https://lh3.googleusercontent.com/drive-viewer/AKGpihYnULVOgKIVqwc4otmdCrLIVB3oTyPkDX_JzWen6vGGjh8IjDUJbqCBOiD0cYsBhRsIRhg_B7qQWHdK0zRuo0HFfYeqD5CQeBw=s1600-rw-v1" class="card-image">
+                    <img src="/static/missingClubPic.png" class="card-image">
                 {% else %}
-                    <img src="{{club.homeURL}}" class="card-image">
+                    <img src="/static/missingClubPic.png" class="card-image"> <!--{{club.homeURL}}-->
                 {% endif %}
                 <div class="color-overlay"></div>
             </div>
