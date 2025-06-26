@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-devMode = True
+devMode = False
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -70,7 +70,7 @@ SITE_ID = 4
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
 INSTALLED_APPS = [
-    # 'daphne',
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -82,7 +82,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    # 'channels',
+    'channels',
     'users',
 ]
 
@@ -213,11 +213,11 @@ LOGIN_REDIRECT_URL = "/clubs/"
 LOGOUT_REDIRECT_URL = "/"
 
 # Daphne
-# ASGI_APPLICATION = "testBranch.asgi.application"
+ASGI_APPLICATION = "testBranch.asgi.application"
 
 # needs to be changed to redis later
-# CHANNEL_LAYERS = {
-    # 'default': {
-        # 'BACKEND': 'channels.layers.InMemoryChannelLayer',
-    # },
-# }
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
