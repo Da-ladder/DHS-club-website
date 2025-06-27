@@ -42,11 +42,12 @@
             return new Promise(resolve => setTimeout(resolve, ms));
         }   
 
+        const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
 
         const adminRoomName = "";
 
         const adminSocket = new WebSocket(
-            'ws://'
+            protocol
             + window.location.host
             + '/ws/trivia/adminControl'
         );
@@ -81,7 +82,7 @@
         const userState = true; // Keeps track is the user is still in the game - CLIENT SIDE ONLY
 
         const chatSocket = new WebSocket(
-            'ws://'
+            protocol
             + window.location.host
             + '/ws/chat/'
             + roomName

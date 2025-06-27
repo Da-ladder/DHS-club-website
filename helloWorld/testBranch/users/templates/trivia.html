@@ -29,12 +29,13 @@
     </div>
     
     <script>
+        const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
         const roomName = "triviaRoom";
         var countdownInProgress = false;
         var userState = true; // Keeps track is the user is still in the game - CLIENT SIDE ONLY
 
         const chatSocket = new WebSocket(
-            'ws://'
+            protocol
             + window.location.host
             + '/ws/chat/'
             + roomName
