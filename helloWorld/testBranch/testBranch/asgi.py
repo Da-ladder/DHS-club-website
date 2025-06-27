@@ -32,5 +32,5 @@ application = ProtocolTypeRouter(
     }
 )
 
-application = get_default_application() # ADDED
+# application = get_default_application() # ADDED
 # application = get_asgi_application() #OLD
