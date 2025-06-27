@@ -48,8 +48,8 @@ if not devMode:
     EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS') # ONLY PERSON HOSTING SHOULD KNOW PASSWORD
 
     # restrict stuff in actual production
-    ALLOWED_HOSTS = ["https://www.dhsclubs.org", "www.dhsclubs.org"]
-    CSRF_TRUSTED_ORIGINS = ["https://www.dhsclubs.org", "www.dhsclubs.org"]
+    ALLOWED_HOSTS = ["https://www.dhsclubs.org", "ws.dhsclubs.org", "www.dhsclubs.org", "wss.dhsclubs.org"]
+    CSRF_TRUSTED_ORIGINS = ["https://www.dhsclubs.org", "ws.dhsclubs.org", "www.dhsclubs.org", "wss.dhsclubs.org"]
 else:
     DEBUG = True
     SECRET_KEY = "development-key-exposedEUkm398278sunL98e89"
