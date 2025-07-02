@@ -35,6 +35,4 @@ urlpatterns = [
     path("triviaAdmin", views.triviaAdmin),
     path("triviaQuestionMaker", views.triviaQuestionMaker),
     path("triviaQuestionUpload", views.triviaQuestionUpload),
-
-    # path("triviaQuestionUpload"),
 ] 

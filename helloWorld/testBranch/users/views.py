@@ -31,7 +31,21 @@ def privacyPolicy(request):
     return render(request, 'privacyPolicy.html')
 
 def blog(request):
-    return render(request, 'blog.html')
+
+    # sets empty to false becuase there will be a post starting out.
+    # grabs posts and club akin to the default club page.
+    club = Club.objects.get(name = "Dev Blog")
+    posts = list(reversed(LiveFeed.objects.filter(club = club)))
+    empty = False
+
+    context = {
+            'posts': posts,
+            'club': club,
+            'userPic': Users.objects.get(email = request.user.email).picURL,
+            'postAbility': club.advisors.filter(email = request.user.email).exists() or club.leaders.filter(email = request.user.email).exists(),
+            'empty': empty
+        }
+    return render(request, 'CombinedDisplay/devBlog.html', context)
 
 def home(request):
     if request.user.is_authenticated:
@@ -58,11 +72,25 @@ def trivia(request):
         return render(request, 'NuhUh.html')
 
 def triviaAdmin(request):
-    return render(request, 'triviaAdmin.html')
+    # gets the trivia club object to attach to the extra data model
+    club = Club.objects.get(name = "Trivia")
+
+    if request.user.is_authenticated and (club.advisors.filter(email = request.user.email).exists() or club.leaders.filter(email = request.user.email).exists()):
+        return render(request, 'triviaAdmin.html')
+    else:
+        return render(request, 'NuhUh.html')
 
 
 def triviaQuestionMaker(request):
-    return render(request, 'triviaQuestionMaker.html')
+    # gets the trivia club object to attach to the extra data model
+    club = Club.objects.get(name = "Trivia")
+
+    if request.user.is_authenticated and (club.advisors.filter(email = request.user.email).exists() or club.leaders.filter(email = request.user.email).exists()):
+        return render(request, 'triviaQuestionMaker.html')
+    else:
+        return render(request, 'NuhUh.html')
+
+    
 
 def triviaQuestionUpload(request):
     # gets the trivia club object to attach to the extra data model
@@ -159,7 +187,7 @@ def dis_my_clubs(request):
         else:
             return render(request, 'desktopDisplay/myClubs.html', context)
     else:
-        return redirect("/")
+        return render(request, 'NuhUh.html')
 
 
 # Triggered when no custom club redirect exists
@@ -234,7 +262,7 @@ def joinClub(request):
         Club.objects.get(name = className).users.add(Users.objects.get(email = request.user.email))
         return redirect("/clubs")
     else:
-        return redirect("/")
+        return render(request, "NuhUh.html", context = {'addInfo': "Please sign in before joining a club"})
     
 def leaveClub(request):
     if request.user.is_authenticated:
